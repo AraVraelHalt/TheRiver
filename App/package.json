@@ -1,0 +1,13 @@
+{
+  "name": "anonymous-chat",
+  "version": "1.0.0",
+  "description": "An anonymous chat app using Electron and Python",
+  "main": "electron/main.js",
+  "scripts": {
+    "start": "electron electron/main.js"
+  },
+  "devDependencies": {
+    "electron": "^29.0.0"
+  }
+}
+
