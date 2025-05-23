@@ -3,15 +3,23 @@
 <head>
   <meta charset="UTF-8">
   <title>TheRiver Chat</title>
+  <style>
+    body {
+      margin: 0;
+      background-color: black;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    #animation {
+      max-width: 100%;
+      height: auto;
+    }
+  </style>
 </head>
 <body>
-  <h1>Anonymous Chat</h1>
-  <div id="output"></div>
-
-  <script>
-    // Temporary test content
-    document.getElementById('output').innerHTML = '<p>Hello from HTML!</p>';
-  </script>
+  <img id="animation" src="assets/loading.gif" alt="Loading animation" />
 </body>
 </html>
 

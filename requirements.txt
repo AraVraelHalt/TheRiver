@@ -1,0 +1,9 @@
+python
+tor
+node
+requests
+'requests[socks]'
+websockets
+stem
+aiohttp
+aiohttp_socks

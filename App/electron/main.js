@@ -12,23 +12,48 @@ function createWindow() {
     });
 
     win.loadFile('index.html');
+}
 
-    const py = spawn('python3', ['python/backend.py']);
+function startBackend() {
+    return new Promise((resolve, reject) => {
+        const py = spawn('python3', ['python/backend.py'], { stdio: ['pipe', 'pipe', 'pipe'] });
 
-    py.stdout.on('data', (data) => {
-        console.log(`Python: ${data}`);
-        win.webContents.send('fromPython', data.toString());
-    });
+        let backendReady = false;
 
-    py.stderr.on('data', (data) => {
-        console.error(`Python error: ${data}`);
-    });
+        py.stdout.on('data', (data) => {
+            data = data.toString().trim();
 
-    py.on('close', (code) => {
-        console.log(`Python process exited with code ${code}`);
+            if (data === "__READY__") {
+                backendReady = true;
+                resolve();  // Trigger the Electron window
+                return;
+            }
+
+            if (!backendReady) {
+                process.stdout.write(data + "\n");  // Spinner and initial output
+            }
+        });
+
+        py.stderr.on('data', (err) => {
+            if (!backendReady) {
+                console.error(`Python error: ${err}`);
+            }
+        });
+
+        py.on('close', (code) => {
+            if (code !== 0) {
+                console.log("Backend exited with code:", code);
+            }
+        });
     });
 }
 
 app.whenReady().then(() => {
-    createWindow();
+    startBackend().then(() => {
+        createWindow();
+    }).catch(err => {
+        console.error('Backend failed:', err);
+        app.quit();
+    });
 });
+
